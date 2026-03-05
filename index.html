@@ -714,35 +714,59 @@ function renderCard() {
   scene.classList.remove('flipped');
 
   document.getElementById('frontWord').textContent    = c.word || '—';
-  document.getElementById('frontReading').textContent = c.reading || c.romanization || c.romaji || c.transliteration || '';
-  document.getElementById('frontPos').textContent     = c.pos || '';
-  // meaning: 支援 meaning / chinese 兩種欄位名稱
-  document.getElementById('backMeaning').textContent  = c.meaning || c.chinese || '—';
+  // reading: N4用reading, 其他也是
+  document.getElementById('frontReading').textContent = c.reading || c.romanization || c.romaji || c.romanji || c.transliteration || '';
+  // pos: N4用part_of_speech, 其他用pos
+  document.getElementById('frontPos').textContent     = c.pos || c.part_of_speech || '';
+  // meaning: N5用chinese, N3/N2/N1用meaning, N4用meanings
+  document.getElementById('backMeaning').textContent  = c.meaning || c.meanings || c.chinese || '—';
 
-  // synonyms: 支援 synonyms / similar
+  // synonyms: 全部都叫synonyms ✅
   const syns = c.synonyms || c.similar || [];
-  // antonyms: 支援 antonyms / opposite
+  // antonyms: 全部都叫antonyms ✅
   const ants = c.antonyms || c.opposite || [];
   document.getElementById('backSyn').innerHTML = syns.map(s=>`<span class="tag">${s}</span>`).join('');
   document.getElementById('backAnt').innerHTML = ants.map(s=>`<span class="tag">${s}</span>`).join('');
   document.getElementById('backSynRow').style.display = syns.length ? '' : 'none';
   document.getElementById('backAntRow').style.display = ants.length ? '' : 'none';
 
-  // example: 支援 jp/cn 以及 japanese/chinese 兩種欄位名稱
-  const ex = c.example || {};
-  document.getElementById('backExOrig').textContent    = ex.jp || ex.japanese || ex.original || ex.original_BR || '';
+  // example: N4用example_sentence, N5用jp/cn, N3/N2/N1用example+japanese/romanji/chinese
+  const ex = c.example || c.example_sentence || {};
+  document.getElementById('backExOrig').textContent    = ex.jp || ex.japanese || ex.original || '';
   document.getElementById('backExRomanji').textContent = ex.romaji || ex.romanji || ex.romanization || '';
   document.getElementById('backExZh').textContent      = ex.cn || ex.chinese || '';
 
-  // conjugation（動詞變化）
+  // conjugation: N5用conjugation, N4/N3/N2/N1用conjugations（多一個s）
+  // 內部欄位也不同：N5用plain/masu/te/tai/potential, N4用dictionary_form/masu_form/te_form/nai_form, N3+用dictionary/polite/te_form等
   const conjRow = document.getElementById('backConjRow');
-  const conj = c.conjugation;
+  const conj = c.conjugation || c.conjugations;
   if (conj && Object.keys(conj).length) {
-    const labels = { plain:'辭書形', masu:'ます形', te:'て形', tai:'たい形', potential:'可能形', nai:'ない形', passive:'被動形', causative:'使役形' };
+    // 統一標籤對應表（兼容所有等級的欄位名稱）
+    const labels = {
+      // N5
+      plain:       '辭書形',
+      masu:        'ます形',
+      te:          'て形',
+      tai:         'たい形',
+      potential:   '可能形',
+      nai:         'ない形',
+      passive:     '被動形',
+      causative:   '使役形',
+      // N4
+      dictionary_form: '辭書形',
+      masu_form:       'ます形',
+      te_form:         'て形',
+      nai_form:        'ない形',
+      // N3/N2/N1
+      dictionary:  '辭書形',
+      polite:      'ます形',
+      ta_form:     'た形',
+      negative:    'ない形',
+    };
     document.getElementById('backConj').innerHTML = Object.entries(conj)
       .map(([k,v]) => `
         <div class="conj-item">
-          <span class="conj-label">${labels[k]||k}</span>
+          <span class="conj-label">${labels[k] || k}</span>
           <span class="conj-val">${v}</span>
         </div>`).join('');
     conjRow.style.display = '';
