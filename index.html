@@ -1,0 +1,897 @@
+﻿<!DOCTYPE html>
+
+
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LinguaFlip · 語言學習卡片</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=Zen+Maru+Gothic:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #eef2ee;
+    --bg2:       #e6ece6;
+    --bg3:       #dce5dc;
+    --panel:     #f4f7f4;
+    --border:    #c8d8c8;
+    --green-dim: #8aab8a;
+    --green:     #5c7e5c;
+    --green-lit: #3d5e3d;
+    --green-glow:#2c472c;
+    --text:      #2e4a2e;
+    --text-dim:  #5a7a5a;
+    --text-mute: #8aaa8a;
+    --accent:    #4a6e4a;
+    --star:      #c8963a;
+    --radius:    14px;
+    --radius-lg: 22px;
+    --font-body: 'Zen Maru Gothic', sans-serif;
+    --font-disp: 'Cormorant Garamond', serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: var(--font-body);
+    min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden;
+  }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 9999; opacity: .15;
+  }
+
+
+/* ── NAV ── */
+.nav {
+display: flex; align-items: center; gap: 12px;
+padding: 14px 28px; border-bottom: 1px solid var(–border);
+background: var(–bg2); position: sticky; top: 0; z-index: 100;
+}
+.nav-logo { font-family: var(–font-disp); font-style: italic; font-size: 1.35rem; color: var(–green-glow); }
+.nav-crumb { display: flex; align-items: center; gap: 6px; font-size: .75rem; color: var(–text-dim); }
+.nav-crumb span { color: var(–text-mute); }
+.nav-crumb .active { color: var(–accent); }
+.nav-back {
+margin-left: auto; background: none; border: 1px solid var(–border);
+color: var(–text-dim); padding: 6px 14px; border-radius: 999px;
+font-size: .78rem; cursor: pointer; transition: all .2s; font-family: var(–font-body);
+}
+.nav-back:hover { border-color: var(–green); color: var(–green-lit); }
+
+
+/* ── MAIN ── */
+main { flex: 1; padding: 36px 28px; max-width: 900px; margin: 0 auto; width: 100%; }
+.screen { display: none; animation: fadeIn .3s ease; }
+.screen.active { display: block; }
+@keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+
+
+.section-title { font-size: 1.9rem; color: var(–green-glow); margin-bottom: 6px; font-weight: 700; line-height: 1.2; }
+.section-sub   { font-size: .85rem; color: var(–text-dim); margin-bottom: 28px; font-weight: 300; }
+
+
+/* ── LANG GRID ── */
+.lang-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px,1fr)); gap: 14px; }
+.lang-card {
+background: var(–panel); border: 1px solid var(–border);
+border-radius: var(–radius-lg); padding: 22px 20px;
+cursor: pointer; transition: all .25s; position: relative; overflow: hidden;
+}
+.lang-card::after {
+content: ‘’; position: absolute; inset: 0;
+background: radial-gradient(circle at 70% 30%, var(–green-dim) 0%, transparent 70%);
+opacity: 0; transition: opacity .3s;
+}
+.lang-card:hover { border-color: var(–green); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(92,126,92,.12); }
+.lang-card:hover::after { opacity: .12; }
+.lang-flag { font-size: 2rem; margin-bottom: 10px; }
+.lang-name { font-size: 1rem; font-weight: 500; }
+.lang-sub  { font-size: .75rem; color: var(–text-dim); margin-top: 3px; }
+.lang-badge {
+display: inline-block; margin-top: 10px;
+background: var(–bg3); border: 1px solid var(–border);
+border-radius: 999px; padding: 2px 10px;
+font-size: .68rem; color: var(–text-mute); font-family: var(–font-mono);
+}
+
+
+/* ── CAT GRID ── */
+.cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); gap: 12px; }
+.cat-card {
+background: var(–panel); border: 1px solid var(–border);
+border-radius: var(–radius); padding: 20px 18px;
+cursor: pointer; transition: all .2s;
+}
+.cat-card:hover { border-color: var(–green); background: var(–bg3); transform: translateY(-1px); }
+.cat-card.special { border-color: var(–green-dim); background: var(–bg2); }
+.cat-icon { font-size: 1.5rem; margin-bottom: 10px; }
+.cat-name { font-size: .9rem; font-weight: 500; }
+.cat-desc { font-size: .72rem; color: var(–text-dim); margin-top: 5px; line-height: 1.4; font-weight: 300; }
+
+
+/* ── LEVEL PILLS ── */
+.level-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 28px; }
+.level-pill {
+background: var(–bg3); border: 1px solid var(–border);
+border-radius: 999px; padding: 7px 20px;
+font-size: .82rem; cursor: pointer; font-family: var(–font-mono);
+color: var(–text-dim); transition: all .2s;
+}
+.level-pill:hover, .level-pill.active { background: var(–green-dim); border-color: var(–green); color: var(–green-glow); }
+
+
+/* ── TOOLBAR ── */
+.toolbar {
+width: 100%; max-width: 560px;
+display: flex; align-items: center; gap: 8px;
+flex-wrap: wrap;
+}
+.tool-btn {
+background: none; border: 1px solid var(–border);
+border-radius: 999px; padding: 5px 14px;
+font-size: .75rem; color: var(–text-dim);
+cursor: pointer; font-family: var(–font-body); transition: all .2s;
+display: flex; align-items: center; gap: 5px;
+}
+.tool-btn:hover { border-color: var(–green); color: var(–green-lit); }
+.tool-btn.active { background: var(–green-dim); border-color: var(–green); color: var(–green-glow); }
+.tool-btn.star-active { background: #fdf3e3; border-color: var(–star); color: var(–star); }
+.total-badge { font-size: .72rem; color: var(–text-mute); font-family: var(–font-mono); margin-left: auto; }
+
+
+/* ── JUMP INPUT ── */
+.jump-row {
+width: 100%; max-width: 560px;
+display: flex; align-items: center; gap: 8px;
+font-size: .78rem; color: var(–text-dim);
+}
+.jump-input {
+width: 60px; padding: 4px 10px;
+background: var(–panel); border: 1px solid var(–border);
+border-radius: 8px; font-size: .8rem; color: var(–text);
+font-family: var(–font-mono); text-align: center;
+outline: none; transition: border-color .2s;
+}
+.jump-input:focus { border-color: var(–green); }
+.jump-btn {
+background: none; border: 1px solid var(–border);
+border-radius: 8px; padding: 4px 12px;
+font-size: .75rem; cursor: pointer; font-family: var(–font-body);
+color: var(–text-dim); transition: all .2s;
+}
+.jump-btn:hover { border-color: var(–green); color: var(–green-lit); }
+
+
+/* ── PROGRESS ── */
+.card-area { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+.card-progress {
+width: 100%; max-width: 560px;
+display: flex; align-items: center; gap: 12px;
+font-size: .75rem; color: var(–text-dim); font-family: var(–font-mono);
+}
+.progress-bar { flex: 1; height: 3px; background: var(–bg3); border-radius: 999px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(–green-dim), var(–green-lit)); border-radius: 999px; transition: width .4s ease; }
+
+
+/* ── CARD ── */
+.card-scene { width: 100%; max-width: 560px; height: 320px; perspective: 1200px; cursor: pointer; }
+.card-inner { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform .55s cubic-bezier(.4,0,.2,1); }
+.card-scene.flipped .card-inner { transform: rotateY(180deg); }
+.card-face {
+position: absolute; inset: 0;
+background: var(–panel); border: 1px solid var(–border);
+border-radius: var(–radius-lg); backface-visibility: hidden;
+display: flex; flex-direction: column; align-items: center; justify-content: center;
+padding: 32px; transition: border-color .2s;
+}
+.card-scene:hover .card-face { border-color: var(–green-dim); }
+.card-face.back { transform: rotateY(180deg); justify-content: flex-start; padding-top: 24px; overflow-y: auto; }
+.card-face.front::before {
+content: ‘’; position: absolute; inset: -1px; border-radius: var(–radius-lg);
+background: linear-gradient(135deg, var(–border), transparent 60%); opacity: .5; z-index: -1;
+}
+
+
+/* ── STAR BUTTON (on card) ── */
+.card-star {
+position: absolute; top: 14px; left: 16px;
+background: none; border: none; cursor: pointer;
+font-size: 1.2rem; line-height: 1;
+transition: transform .2s;
+z-index: 10;
+}
+.card-star:hover { transform: scale(1.2); }
+.card-star.starred { filter: drop-shadow(0 0 4px rgba(200,150,58,.5)); }
+
+
+.card-watermark { position: absolute; top: 14px; right: 18px; font-size: .6rem; color: var(–text-mute); font-family: var(–font-mono); letter-spacing: .05em; opacity: .6; }
+.card-word { font-family: var(–font-disp); font-size: 2.8rem; color: var(–green-glow); text-align: center; line-height: 1.2; margin-bottom: 8px; }
+.card-reading { font-size: .92rem; color: var(–text-dim); font-family: var(–font-mono); margin-bottom: 4px; }
+.card-pos {
+display: inline-block; background: var(–bg3); border: 1px solid var(–border);
+border-radius: 999px; padding: 3px 12px; font-size: .7rem; color: var(–text-mute);
+font-family: var(–font-mono); margin-top: 8px;
+}
+.card-hint { position: absolute; bottom: 16px; font-size: .68rem; color: var(–text-mute); }
+
+
+.card-back-row { width: 100%; margin-bottom: 10px; }
+.card-back-label { font-size: .62rem; color: var(–text-mute); font-family: var(–font-mono); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 3px; }
+.card-back-val { font-size: .9rem; color: var(–text); line-height: 1.6; }
+.card-back-val.meaning  { font-size: 1.1rem; color: var(–green-lit); font-weight: 700; }
+.card-back-val.example-orig { font-size: .85rem; color: var(–text-dim); }
+.card-back-val.example-zh   { font-size: .8rem;  color: var(–text-mute); }
+.card-back-val.romanji       { font-size: .75rem; color: var(–text-mute); font-family: var(–font-mono); }
+.card-divider { width: 100%; height: 1px; background: var(–border); margin: 8px 0; }
+
+
+/* ── STARRED EMPTY STATE ── */
+.empty-state { text-align: center; padding: 48px 20px; color: var(–text-mute); }
+.empty-state .e-icon { font-size: 2.5rem; margin-bottom: 12px; }
+.empty-state .e-text { font-size: .88rem; line-height: 1.7; font-weight: 300; }
+
+
+/* ── COMPARE ── */
+.cmp-scene { width: 100%; max-width: 600px; perspective: 1200px; cursor: pointer; }
+.cmp-inner { width: 100%; position: relative; transform-style: preserve-3d; transition: transform .55s cubic-bezier(.4,0,.2,1); }
+.cmp-scene.flipped .cmp-inner { transform: rotateY(180deg); }
+.cmp-face { background: var(–panel); border: 1px solid var(–border); border-radius: var(–radius-lg); backface-visibility: hidden; padding: 28px; min-height: 260px; }
+.cmp-face.back { position: absolute; inset: 0; transform: rotateY(180deg); overflow-y: auto; }
+.cmp-scene:hover .cmp-face { border-color: var(–green-dim); }
+.cmp-category-badge { display: inline-block; margin-bottom: 12px; background: var(–bg3); border: 1px solid var(–green-dim); border-radius: 999px; padding: 3px 14px; font-size: .68rem; color: var(–green-lit); font-family: var(–font-mono); }
+.cmp-title { font-size: 1.25rem; font-weight: 700; color: var(–green-glow); margin-bottom: 18px; }
+.cmp-items { display: flex; flex-direction: column; gap: 10px; }
+.cmp-item { background: var(–bg2); border: 1px solid var(–border); border-radius: var(–radius); padding: 12px 14px; }
+.cmp-item-word    { font-family: var(–font-disp); font-size: 1.5rem; color: var(–green-glow); margin-bottom: 3px; }
+.cmp-item-meaning { font-size: .88rem; color: var(–text); font-weight: 500; margin-bottom: 3px; }
+.cmp-item-nuance  { font-size: .76rem; color: var(–text-dim); line-height: 1.5; font-weight: 300; }
+.cmp-hint { text-align: center; margin-top: 14px; font-size: .68rem; color: var(–text-mute); }
+.cmp-back-tip { background: var(–bg3); border: 1px solid var(–green-dim); border-radius: var(–radius); padding: 14px 16px; margin-bottom: 16px; }
+.cmp-back-tip-label { font-size: .62rem; color: var(–green-lit); font-family: var(–font-mono); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 6px; }
+.cmp-back-tip-text { font-size: .88rem; color: var(–text); line-height: 1.7; }
+.cmp-examples { display: flex; flex-direction: column; gap: 8px; }
+.cmp-example-word { font-size: .7rem; color: var(–green-lit); font-family: var(–font-mono); margin-bottom: 2px; }
+.cmp-example-sent { font-size: .82rem; color: var(–text-dim); line-height: 1.5; }
+.cmp-example-zh   { font-size: .76rem; color: var(–text-mute); margin-top: 2px; }
+
+
+/* ── TAGS ── */
+.tag-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
+.tag { background: var(–bg2); border: 1px solid var(–border); border-radius: 6px; padding: 2px 8px; font-size: .7rem; color: var(–text-dim); font-family: var(–font-mono); }
+
+
+/* ── CONTROLS ── */
+.card-controls { display: flex; gap: 12px; align-items: center; }
+.btn { border: 1px solid var(–border); border-radius: 999px; padding: 10px 24px; font-size: .82rem; cursor: pointer; font-family: var(–font-body); transition: all .2s; }
+.btn-ghost   { background: none; color: var(–text-dim); }
+.btn-ghost:hover { border-color: var(–green); color: var(–green-lit); }
+.btn-primary { background: var(–green-dim); border-color: var(–green); color: var(–green-glow); }
+.btn-primary:hover { background: var(–green); color: var(–bg); }
+.key-hint { font-size: .7rem; color: var(–text-mute); font-family: var(–font-mono); text-align: center; }
+.key-tag  { display: inline-block; border: 1px solid var(–border); border-radius: 4px; padding: 1px 6px; font-size: .65rem; }
+
+
+/* ── FOOTER ── */
+footer { text-align: center; padding: 18px 28px; border-top: 1px solid var(–border); background: var(–bg2); font-size: .7rem; color: var(–text-mute); font-family: var(–font-mono); letter-spacing: .04em; }
+
+
+/* ── RWD ── */
+@media (max-width: 600px) {
+main { padding: 24px 16px; }
+.card-scene { height: 280px; }
+.card-word  { font-size: 2.2rem; }
+.lang-grid  { grid-template-columns: 1fr 1fr; }
+.cat-grid   { grid-template-columns: 1fr 1fr; }
+}
+</style>
+
+
+</head>
+<body>
+
+
+<nav class="nav">
+  <div class="nav-logo">🌿 LinguaFlip</div>
+  <div class="nav-crumb" id="crumb"><span class="active">首頁</span></div>
+  <button class="nav-back" id="backBtn" style="display:none" onclick="goBack()">← 返回</button>
+</nav>
+
+
+<main>
+
+
+  <!-- S1 選語言 -->
+
+
+  <section class="screen active" id="screenLang">
+    <h1 class="section-title">選擇語言</h1>
+    <p class="section-sub">選擇你想練習的語言，開始學習！</p>
+    <div class="lang-grid" id="langGrid"></div>
+  </section>
+
+
+  <!-- S2 選類型 -->
+
+
+  <section class="screen" id="screenCat">
+    <h1 class="section-title" id="catTitle">—</h1>
+    <p class="section-sub">選擇練習項目</p>
+    <div class="cat-grid" id="catGrid"></div>
+  </section>
+
+
+  <!-- S3 卡片 -->
+
+
+  <section class="screen" id="screenLevel">
+    <h1 class="section-title" id="levelTitle">—</h1>
+    <p class="section-sub" id="levelSub">選擇等級開始練習</p>
+    <div class="level-row" id="levelRow"></div>
+
+
+```
+<div id="cardArea" class="card-area" style="display:none">
+
+
+  <!-- 工具列 -->
+  <div class="toolbar">
+    <button class="tool-btn" id="btnOrder" onclick="setOrder('seq')" title="順序">📋 順序</button>
+    <button class="tool-btn" id="btnRandom" onclick="setOrder('rnd')" title="隨機">🔀 隨機</button>
+    <button class="tool-btn" id="btnStarFilter" onclick="toggleStarFilter()" title="只看不熟">⭐ 不熟清單</button>
+    <span class="total-badge" id="totalBadge"></span>
+  </div>
+
+
+  <!-- 跳卡 -->
+  <div class="jump-row">
+    <span>跳到第</span>
+    <input class="jump-input" id="jumpInput" type="number" min="1" placeholder="？">
+    <button class="jump-btn" onclick="jumpToCard()">跳過去</button>
+    <span id="jumpHint" style="font-size:.72rem;color:var(--text-mute);font-family:var(--font-mono)"></span>
+  </div>
+
+
+  <!-- 進度 -->
+  <div class="card-progress">
+    <span id="cardCounter">0 / 0</span>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <span id="cardPct">0%</span>
+  </div>
+
+
+  <!-- 卡片 -->
+  <div class="card-scene" id="cardScene" onclick="flipCard()">
+    <div class="card-inner">
+      <div class="card-face front">
+        <button class="card-star" id="starBtn" onclick="event.stopPropagation(); toggleStar()">☆</button>
+        <div class="card-watermark">Vivian Wen</div>
+        <div class="card-word" id="frontWord">—</div>
+        <div class="card-reading" id="frontReading"></div>
+        <div class="card-pos" id="frontPos"></div>
+        <div class="card-hint">點擊或按空白鍵翻面</div>
+      </div>
+      <div class="card-face back">
+        <button class="card-star" id="starBtnBack" onclick="event.stopPropagation(); toggleStar()">☆</button>
+        <div class="card-watermark">Vivian Wen</div>
+        <div class="card-back-row">
+          <div class="card-back-label">意思</div>
+          <div class="card-back-val meaning" id="backMeaning">—</div>
+        </div>
+        <div class="card-divider"></div>
+        <div class="card-back-row" id="backSynRow">
+          <div class="card-back-label">同義詞</div>
+          <div class="tag-list" id="backSyn"></div>
+        </div>
+        <div class="card-back-row" id="backAntRow">
+          <div class="card-back-label">反義詞</div>
+          <div class="tag-list" id="backAnt"></div>
+        </div>
+        <div class="card-divider"></div>
+        <div class="card-back-row">
+          <div class="card-back-label">例句</div>
+          <div class="card-back-val example-orig" id="backExOrig"></div>
+          <div class="card-back-val romanji"       id="backExRomanji"></div>
+          <div class="card-back-val example-zh"   id="backExZh"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 空清單提示 -->
+  <div class="empty-state" id="emptyStarred" style="display:none">
+    <div class="e-icon">⭐</div>
+    <div class="e-text">不熟清單是空的～<br>練習時按卡片上的 ☆ 就可以加入！</div>
+  </div>
+
+
+  <!-- 按鈕 -->
+  <div class="card-controls">
+    <button class="btn btn-ghost"   onclick="prevCard()">← 上一張</button>
+    <button class="btn btn-primary" onclick="nextCard()">下一張 →</button>
+  </div>
+  <div class="key-hint">
+    <span class="key-tag">Space</span> 翻面 ·
+    <span class="key-tag">←</span> 上一張 ·
+    <span class="key-tag">→</span> 下一張 ·
+    <span class="key-tag">S</span> ⭐ 加入不熟
+  </div>
+</div>
+```
+
+
+  </section>
+
+
+  <!-- S4 易混淆比較 -->
+
+
+  <section class="screen" id="screenCompare">
+    <h1 class="section-title" id="cmpTitle">🔀 易混淆比較</h1>
+    <p class="section-sub" id="cmpSub">點擊卡片翻面查看區別技巧</p>
+    <div class="card-area">
+      <div class="card-progress">
+        <span id="cmpCounter">0 / 0</span>
+        <div class="progress-bar"><div class="progress-fill" id="cmpFill" style="width:0%"></div></div>
+        <span id="cmpPct">0%</span>
+      </div>
+      <div class="cmp-scene" id="cmpScene" onclick="flipCmp()">
+        <div class="cmp-inner">
+          <div class="cmp-face front">
+            <div class="card-watermark">Vivian Wen</div>
+            <div class="cmp-category-badge" id="cmpCatBadge">—</div>
+            <div class="cmp-title" id="cmpCardTitle">—</div>
+            <div class="cmp-items" id="cmpItems"></div>
+            <div class="cmp-hint">點擊翻面查看區別技巧 ✨</div>
+          </div>
+          <div class="cmp-face back">
+            <div class="card-watermark">Vivian Wen</div>
+            <div class="cmp-back-tip">
+              <div class="cmp-back-tip-label">💡 區別技巧</div>
+              <div class="cmp-back-tip-text" id="cmpTip">—</div>
+            </div>
+            <div class="card-back-label" style="margin-bottom:10px">例句比較</div>
+            <div class="cmp-examples" id="cmpExamples"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card-controls">
+        <button class="btn btn-ghost"   onclick="prevCmp()">← 上一組</button>
+        <button class="btn btn-primary" onclick="nextCmp()">下一組 →</button>
+      </div>
+      <div class="key-hint">
+        <span class="key-tag">Space</span> 翻面 ·
+        <span class="key-tag">←</span> 上一組 ·
+        <span class="key-tag">→</span> 下一組
+      </div>
+    </div>
+  </section>
+
+
+</main>
+
+
+<footer>
+  © 2025 <span style="color:var(--text-dim);font-weight:500;">Vivian Wen</span> · LinguaFlip · All rights reserved
+</footer>
+
+
+<script>
+// ══ 語言設定 ══
+const LANGUAGES = [
+  { id:'japanese',   flag:'🇯🇵', name:'日文',    sub:'にほんご',    levels:['N5','N4','N3','N2','N1'], system:'jlpt' },
+  { id:'french',     flag:'🇫🇷', name:'法文',    sub:'Français',    levels:['A1','A2','B1','B2','C1','C2'], system:'cefr' },
+  { id:'german',     flag:'🇩🇪', name:'德文',    sub:'Deutsch',     levels:['A1','A2','B1','B2','C1','C2'], system:'cefr' },
+  { id:'dutch',      flag:'🇳🇱', name:'荷蘭文',  sub:'Nederlands',  levels:['A1','A2','B1','B2','C1','C2'], system:'cefr' },
+  { id:'spanish',    flag:'🇪🇸', name:'西班牙文', sub:'Español',    levels:['A1','A2','B1','B2','C1','C2'], system:'cefr' },
+  { id:'italian',    flag:'🇮🇹', name:'義大利文', sub:'Italiano',   levels:['A1','A2','B1','B2','C1','C2'], system:'cefr' },
+  { id:'portuguese', flag:'🇧🇷', name:'葡萄牙文', sub:'Português',  levels:['A1','A2','B1','B2','C1','C2'], system:'cefr' },
+  { id:'vietnamese', flag:'🇻🇳', name:'越南文',  sub:'Tiếng Việt', levels:['A1','A2','B1','B2','C1','C2'], system:'cefr' },
+  { id:'thai',       flag:'🇹🇭', name:'泰文',    sub:'ภาษาไทย',    levels:['A1','A2','B1','B2','C1','C2'], system:'cefr' },
+  { id:'korean',     flag:'🇰🇷', name:'韓文',    sub:'한국어',      levels:['A1','A2','B1','B2','C1','C2'], system:'cefr' },
+  { id:'russian',    flag:'🇷🇺', name:'俄文',    sub:'Русский',    levels:['A1','A2','B1','B2','C1','C2'], system:'cefr' },
+];
+const CATEGORIES = [
+  { id:'vocabulary', icon:'📖', name:'單字',      file:'vocabulary', desc:'按等級練習單字卡片',     special:false },
+  { id:'grammar',    icon:'📐', name:'文法',      file:'grammar',    desc:'句型、時態、助詞等',     special:false },
+  { id:'slang',      icon:'💬', name:'口語／俚語', file:'slang',      desc:'日常對話常用表達',      special:false },
+  { id:'idioms',     icon:'🔗', name:'慣用語',    file:'idioms',     desc:'固定搭配與片語',        special:false },
+  { id:'phonetics',  icon:'🔊', name:'發音規則',   file:'phonetics',  desc:'聲調、連音、發音技巧',   special:false },
+  { id:'compare',    icon:'🔀', name:'易混淆比較',  file:'compare',    desc:'長得像但意思不同的詞 ✨', special:true  },
+];
+
+
+// ══ State ══
+let state = {
+  lang:null, cat:null, level:null,
+  allCards:[], displayCards:[], idx:0, flipped:false,
+  order:'seq',        // 'seq' | 'rnd'
+  starFilter:false,   // 只看不熟
+  cmpCards:[], cmpIdx:0, cmpFlipped:false,
+};
+let navHistory = [];
+
+
+// ══ LocalStorage helpers ══
+function starKey(langId, catId, level) { return `lf_star_${langId}_${catId}_${level}`; }
+function getStarred(langId, catId, level) {
+  try { return JSON.parse(localStorage.getItem(starKey(langId,catId,level)) || '[]'); }
+  catch { return []; }
+}
+function saveStarred(langId, catId, level, ids) {
+  try { localStorage.setItem(starKey(langId,catId,level), JSON.stringify(ids)); } catch {}
+}
+function isStarred(id) {
+  const { lang, cat, level } = state;
+  return getStarred(lang.id, cat.id, level).includes(id);
+}
+function toggleStarId(id) {
+  const { lang, cat, level } = state;
+  let ids = getStarred(lang.id, cat.id, level);
+  if (ids.includes(id)) ids = ids.filter(x => x !== id);
+  else ids.push(id);
+  saveStarred(lang.id, cat.id, level, ids);
+}
+
+
+// ══ Init ══
+function init() {
+  const grid = document.getElementById('langGrid');
+  LANGUAGES.forEach(lang => {
+    const el = document.createElement('div');
+    el.className = 'lang-card';
+    el.innerHTML = `
+      <div class="lang-flag">${lang.flag}</div>
+      <div class="lang-name">${lang.name}</div>
+      <div class="lang-sub">${lang.sub}</div>
+      <div class="lang-badge">${lang.system.toUpperCase()} · ${lang.levels.length} 級</div>
+    `;
+    el.onclick = () => selectLang(lang);
+    grid.appendChild(el);
+  });
+}
+
+
+// ══ Navigation ══
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.getElementById('backBtn').style.display = navHistory.length ? '' : 'none';
+  window.scrollTo({ top:0, behavior:'smooth' });
+}
+function goBack() {
+  if (!navHistory.length) return;
+  const prev = navHistory.pop();
+  if      (prev==='lang')    { showScreen('screenLang');  updateCrumb([]); }
+  else if (prev==='cat')     { showScreen('screenCat');   updateCrumb([state.lang.name]); }
+  else if (prev==='level')   { showScreen('screenLevel'); updateCrumb([state.lang.name, state.cat.name]); }
+  else if (prev==='compare') { showScreen('screenCat');   updateCrumb([state.lang.name]); }
+  document.getElementById('backBtn').style.display = navHistory.length ? '' : 'none';
+}
+function updateCrumb(parts) {
+  let html = '<span>首頁</span>';
+  parts.forEach(p => { html += ` <span>›</span> <span class="active">${p}</span>`; });
+  document.getElementById('crumb').innerHTML = html;
+}
+
+
+// ══ Select Lang ══
+function selectLang(lang) {
+  state.lang = lang;
+  navHistory.push('lang');
+  document.getElementById('catTitle').textContent = lang.flag + ' ' + lang.name;
+  const grid = document.getElementById('catGrid');
+  grid.innerHTML = '';
+  CATEGORIES.forEach(cat => {
+    const el = document.createElement('div');
+    el.className = 'cat-card' + (cat.special ? ' special' : '');
+    el.innerHTML = `<div class="cat-icon">${cat.icon}</div><div class="cat-name">${cat.name}</div><div class="cat-desc">${cat.desc}</div>`;
+    el.onclick = () => selectCat(cat);
+    grid.appendChild(el);
+  });
+  updateCrumb([lang.name]);
+  showScreen('screenCat');
+}
+
+
+// ══ Select Cat ══
+function selectCat(cat) {
+  state.cat = cat;
+  navHistory.push('cat');
+  if (cat.id === 'compare') { loadCompare(); return; }
+  document.getElementById('levelTitle').textContent = cat.icon + ' ' + cat.name;
+  document.getElementById('levelSub').textContent   = '選擇等級開始練習';
+  const row = document.getElementById('levelRow');
+  row.innerHTML = '';
+  state.lang.levels.forEach(lv => {
+    const pill = document.createElement('button');
+    pill.className = 'level-pill';
+    pill.textContent = lv;
+    pill.onclick = () => selectLevel(lv, pill);
+    row.appendChild(pill);
+  });
+  document.getElementById('cardArea').style.display = 'none';
+  updateCrumb([state.lang.name, cat.name]);
+  showScreen('screenLevel');
+}
+
+
+// ══ Select Level ══
+async function selectLevel(level, pillEl) {
+  document.querySelectorAll('.level-pill').forEach(p => p.classList.remove('active'));
+  pillEl.classList.add('active');
+  state.level = level;
+  state.starFilter = false;
+  state.order = 'seq';
+
+
+  const path = `data/${state.lang.id}/${state.cat.file}_${level.toLowerCase()}.json`;
+  try {
+    const res = await fetch(path);
+    if (!res.ok) throw new Error();
+    state.allCards = await res.json();
+  } catch {
+    state.allCards = getSampleCards(state.lang.id, level);
+  }
+
+
+  state.idx = 0; state.flipped = false;
+  buildDisplayCards();
+  updateToolbar();
+  document.getElementById('cardArea').style.display = 'flex';
+  renderCard();
+}
+
+
+// ══ Build display list ══
+function buildDisplayCards() {
+  let cards = [...state.allCards];
+  if (state.starFilter) {
+    const ids = getStarred(state.lang.id, state.cat.id, state.level);
+    cards = cards.filter(c => ids.includes(c.id));
+  }
+  if (state.order === 'rnd') {
+    for (let i = cards.length-1; i > 0; i--) {
+      const j = Math.floor(Math.random()*(i+1));
+      [cards[i],cards[j]] = [cards[j],cards[i]];
+    }
+  }
+  state.displayCards = cards;
+  state.idx = 0;
+}
+
+
+// ══ Toolbar ══
+function updateToolbar() {
+  document.getElementById('btnOrder').classList.toggle('active', state.order==='seq');
+  document.getElementById('btnRandom').classList.toggle('active', state.order==='rnd');
+  document.getElementById('btnStarFilter').classList.toggle('star-active', state.starFilter);
+
+
+  const starredCount = getStarred(state.lang.id, state.cat.id, state.level).length;
+  const filterLabel = state.starFilter
+    ? `⭐ 不熟清單 (${state.displayCards.length})`
+    : `☆ 不熟清單 (${starredCount})`;
+  document.getElementById('btnStarFilter').textContent = filterLabel;
+
+
+  const total = state.displayCards.length;
+  document.getElementById('totalBadge').textContent = `共 ${state.allCards.length} 張`;
+  document.getElementById('jumpInput').max = total;
+  document.getElementById('jumpHint').textContent = total > 0 ? `（1–${total}）` : '';
+}
+
+
+function setOrder(mode) {
+  state.order = mode;
+  buildDisplayCards();
+  updateToolbar();
+  renderCard();
+}
+
+
+function toggleStarFilter() {
+  state.starFilter = !state.starFilter;
+  buildDisplayCards();
+  updateToolbar();
+  renderCard();
+}
+
+
+// ══ Jump ══
+function jumpToCard() {
+  const val = parseInt(document.getElementById('jumpInput').value);
+  const total = state.displayCards.length;
+  if (isNaN(val) || val < 1 || val > total) return;
+  state.idx = val - 1;
+  state.flipped = false;
+  renderCard();
+}
+
+
+// ══ Star toggle ══
+function toggleStar() {
+  const card = state.displayCards[state.idx];
+  if (!card) return;
+  toggleStarId(card.id);
+  updateStarUI(card.id);
+  updateToolbar();
+}
+
+
+function updateStarUI(cardId) {
+  const starred = isStarred(cardId);
+  const s1 = document.getElementById('starBtn');
+  const s2 = document.getElementById('starBtnBack');
+  const icon = starred ? '⭐' : '☆';
+  s1.textContent = starred ? '⭐' : '☆';
+  s2.textContent = starred ? '⭐' : '☆';
+  s1.classList.toggle('starred', starred);
+  s2.classList.toggle('starred', starred);
+}
+
+
+// ══ Render Card ══
+function renderCard() {
+  const scene   = document.getElementById('cardScene');
+  const empty   = document.getElementById('emptyStarred');
+  const controls= document.querySelector('.card-controls');
+  const keyhint = document.querySelector('.key-hint');
+
+
+  if (!state.displayCards.length) {
+    scene.style.display   = 'none';
+    controls.style.display= 'none';
+    keyhint.style.display = 'none';
+    empty.style.display   = '';
+    document.getElementById('cardCounter').textContent = '0 / 0';
+    document.getElementById('progressFill').style.width = '0%';
+    document.getElementById('cardPct').textContent = '0%';
+    return;
+  }
+
+
+  scene.style.display    = '';
+  controls.style.display = '';
+  keyhint.style.display  = '';
+  empty.style.display    = 'none';
+
+
+  const c = state.displayCards[state.idx];
+  state.flipped = false;
+  scene.classList.remove('flipped');
+
+
+  document.getElementById('frontWord').textContent    = c.word || '—';
+  document.getElementById('frontReading').textContent = c.reading || c.romanization || c.transliteration || '';
+  document.getElementById('frontPos').textContent     = c.pos || '';
+  document.getElementById('backMeaning').textContent  = c.meaning || '—';
+
+
+  const syns = c.synonyms||[], ants = c.antonyms||[];
+  document.getElementById('backSyn').innerHTML = syns.map(s=>`<span class="tag">${s}</span>`).join('');
+  document.getElementById('backAnt').innerHTML = ants.map(s=>`<span class="tag">${s}</span>`).join('');
+  document.getElementById('backSynRow').style.display = syns.length ? '' : 'none';
+  document.getElementById('backAntRow').style.display = ants.length ? '' : 'none';
+
+
+  const ex = c.example||{};
+  document.getElementById('backExOrig').textContent    = ex.japanese||ex.original||ex.original_BR||'';
+  document.getElementById('backExRomanji').textContent = ex.romanji ||ex.romanization||'';
+  document.getElementById('backExZh').textContent      = ex.chinese||'';
+
+
+  updateStarUI(c.id);
+
+
+  const total=state.displayCards.length, cur=state.idx+1, pct=Math.round(cur/total*100);
+  document.getElementById('cardCounter').textContent  = `${cur} / ${total}`;
+  document.getElementById('progressFill').style.width = pct+'%';
+  document.getElementById('cardPct').textContent      = pct+'%';
+}
+
+
+// ══ Flip / Nav ══
+function flipCard() { state.flipped=!state.flipped; document.getElementById('cardScene').classList.toggle('flipped',state.flipped); }
+function nextCard() { if(state.idx<state.displayCards.length-1){state.idx++;renderCard();} }
+function prevCard() { if(state.idx>0){state.idx--;renderCard();} }
+
+
+// ══ Compare ══
+async function loadCompare() {
+  const path = `data/${state.lang.id}/compare.json`;
+  try {
+    const res = await fetch(path);
+    if (!res.ok) throw new Error();
+    state.cmpCards = await res.json();
+  } catch {
+    state.cmpCards = getSampleCompare(state.lang.id);
+  }
+  state.cmpIdx=0; state.cmpFlipped=false;
+  document.getElementById('cmpTitle').textContent = state.lang.flag+' 易混淆比較';
+  document.getElementById('cmpSub').textContent   = `共 ${state.cmpCards.length} 組 · 點擊卡片翻面查看區別技巧`;
+  updateCrumb([state.lang.name,'易混淆比較']);
+  showScreen('screenCompare');
+  renderCmp();
+}
+function renderCmp() {
+  const c = state.cmpCards[state.cmpIdx]; if(!c) return;
+  state.cmpFlipped=false;
+  document.getElementById('cmpScene').classList.remove('flipped');
+  document.getElementById('cmpCatBadge').textContent  = c.category||'';
+  document.getElementById('cmpCardTitle').textContent = c.title||'';
+  document.getElementById('cmpTip').textContent       = c.tip||'';
+  document.getElementById('cmpItems').innerHTML = (c.items||[]).map(item=>`
+    <div class="cmp-item">
+      <div class="cmp-item-word">${item.word}</div>
+      <div class="cmp-item-meaning">${item.meaning}</div>
+      <div class="cmp-item-nuance">${item.nuance||''}</div>
+    </div>`).join('');
+  document.getElementById('cmpExamples').innerHTML = (c.items||[]).map(item=>`
+    <div>
+      <div class="cmp-example-word">${item.word}</div>
+      <div class="cmp-example-sent">${item.example||''}</div>
+      <div class="cmp-example-zh">${item.example_zh||''}</div>
+    </div>
+    <div class="card-divider"></div>`).join('');
+  const total=state.cmpCards.length,cur=state.cmpIdx+1,pct=Math.round(cur/total*100);
+  document.getElementById('cmpCounter').textContent = `${cur} / ${total}`;
+  document.getElementById('cmpFill').style.width    = pct+'%';
+  document.getElementById('cmpPct').textContent     = pct+'%';
+}
+function flipCmp()  { state.cmpFlipped=!state.cmpFlipped; document.getElementById('cmpScene').classList.toggle('flipped',state.cmpFlipped); }
+function nextCmp()  { if(state.cmpIdx<state.cmpCards.length-1){state.cmpIdx++;renderCmp();} }
+function prevCmp()  { if(state.cmpIdx>0){state.cmpIdx--;renderCmp();} }
+
+
+// ══ Keyboard ══
+document.addEventListener('keydown', e => {
+  const lv  = document.getElementById('screenLevel').classList.contains('active');
+  const cmp = document.getElementById('screenCompare').classList.contains('active');
+  if (e.target.tagName==='INPUT') return; // 不干擾跳卡輸入框
+  if (lv) {
+    if (e.code==='Space')       { e.preventDefault(); flipCard(); }
+    if (e.code==='ArrowRight')  nextCard();
+    if (e.code==='ArrowLeft')   prevCard();
+    if (e.code==='KeyS')        toggleStar();
+  }
+  if (cmp) {
+    if (e.code==='Space')       { e.preventDefault(); flipCmp(); }
+    if (e.code==='ArrowRight')  nextCmp();
+    if (e.code==='ArrowLeft')   prevCmp();
+  }
+});
+
+
+// ══ Sample Data ══
+function getSampleCards(langId) {
+  const d = {
+    japanese:[
+      {id:1,word:'義務',reading:'ぎむ',romanji:'gimu',pos:'名詞',meaning:'義務；責任',synonyms:['責務 (sekimu)'],antonyms:['権利 (kenri)'],example:{japanese:'国民には税金を納める義務がある。',romanji:'Kokumin niwa zeikin o osameru gimu ga aru.',chinese:'公民有納稅的義務。'}},
+      {id:2,word:'覚悟',reading:'かくご',romanji:'kakugo',pos:'名詞',meaning:'覺悟；心理準備',synonyms:['決意 (ketsui)'],antonyms:[],example:{japanese:'困難に立ち向かう覚悟が必要だ。',romanji:'Konnan ni tachimukau kakugo ga hitsuyou da.',chinese:'需要面對困難的覺悟。'}},
+      {id:3,word:'曖昧',reading:'あいまい',romanji:'aimai',pos:'形容動詞',meaning:'模糊、曖昧',synonyms:['不明確'],antonyms:['明確 (meikaku)'],example:{japanese:'彼の返事は曖昧だった。',romanji:'Kare no henji wa aimai datta.',chinese:'他的回答很模糊。'}},
+    ],
+    korean:[
+      {id:1,word:'의무',romanization:'uimu',pos:'명사',meaning:'義務；責任',synonyms:['책임'],antonyms:['권리'],example:{original:'시민은 세금을 납부할 의무가 있다.',romanization:'Simin-eun segeum-eul napbu-hal uimu-ga itda.',chinese:'公民有納稅的義務。'}},
+    ],
+  };
+  return d[langId]||d['japanese'];
+}
+function getSampleCompare(langId) {
+  const d = {
+    japanese:[
+      {id:1,category:'心理・感情類',title:'びっくり vs がっかり',tip:'びっくり 是外來刺激造成的瞬間反應；がっかり 是期待落空的持續心情。',items:[{word:'びっくり',meaning:'嚇一跳、驚訝',nuance:'突然受外來刺激的反應',example:'突然の声にびっくりした。',example_zh:'被突然的聲音嚇了一跳。'},{word:'がっかり',meaning:'失望、沮喪',nuance:'期待沒被滿足的持續感受',example:'試験に落ちてがっかりした。',example_zh:'考試落榜，感到很失望。'}]},
+      {id:2,category:'認知・判斷類',title:'はっきり vs すっきり',tip:'はっきり 是清楚明確；すっきり 是清爽舒暢。前者用於認知，後者用於感受。',items:[{word:'はっきり',meaning:'明確地',nuance:'視覺或判斷上沒有模糊',example:'はっきり言ってください。',example_zh:'請說清楚一點。'},{word:'すっきり',meaning:'舒暢、清爽',nuance:'身心清爽，沒有負擔',example:'部屋がすっきりした。',example_zh:'房間變得清爽了。'}]},
+    ],
+  };
+  return d[langId]||d['japanese'];
+}
+
+
+init();
+</script>
+
+
+</body>
+</html>
