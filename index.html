@@ -1,5 +1,4 @@
-﻿<!DOCTYPE html>
-
+<!DOCTYPE html>
 
 <html lang="zh-TW">
 <head>
@@ -41,7 +40,6 @@
     pointer-events: none; z-index: 9999; opacity: .15;
   }
 
-
 /* ── NAV ── */
 .nav {
 display: flex; align-items: center; gap: 12px;
@@ -59,17 +57,14 @@ font-size: .78rem; cursor: pointer; transition: all .2s; font-family: var(–fon
 }
 .nav-back:hover { border-color: var(–green); color: var(–green-lit); }
 
-
 /* ── MAIN ── */
 main { flex: 1; padding: 36px 28px; max-width: 900px; margin: 0 auto; width: 100%; }
 .screen { display: none; animation: fadeIn .3s ease; }
 .screen.active { display: block; }
 @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
 
-
 .section-title { font-size: 1.9rem; color: var(–green-glow); margin-bottom: 6px; font-weight: 700; line-height: 1.2; }
 .section-sub   { font-size: .85rem; color: var(–text-dim); margin-bottom: 28px; font-weight: 300; }
-
 
 /* ── LANG GRID ── */
 .lang-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px,1fr)); gap: 14px; }
@@ -95,7 +90,6 @@ border-radius: 999px; padding: 2px 10px;
 font-size: .68rem; color: var(–text-mute); font-family: var(–font-mono);
 }
 
-
 /* ── CAT GRID ── */
 .cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); gap: 12px; }
 .cat-card {
@@ -109,7 +103,6 @@ cursor: pointer; transition: all .2s;
 .cat-name { font-size: .9rem; font-weight: 500; }
 .cat-desc { font-size: .72rem; color: var(–text-dim); margin-top: 5px; line-height: 1.4; font-weight: 300; }
 
-
 /* ── LEVEL PILLS ── */
 .level-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 28px; }
 .level-pill {
@@ -119,7 +112,6 @@ font-size: .82rem; cursor: pointer; font-family: var(–font-mono);
 color: var(–text-dim); transition: all .2s;
 }
 .level-pill:hover, .level-pill.active { background: var(–green-dim); border-color: var(–green); color: var(–green-glow); }
-
 
 /* ── TOOLBAR ── */
 .toolbar {
@@ -138,7 +130,6 @@ display: flex; align-items: center; gap: 5px;
 .tool-btn.active { background: var(–green-dim); border-color: var(–green); color: var(–green-glow); }
 .tool-btn.star-active { background: #fdf3e3; border-color: var(–star); color: var(–star); }
 .total-badge { font-size: .72rem; color: var(–text-mute); font-family: var(–font-mono); margin-left: auto; }
-
 
 /* ── JUMP INPUT ── */
 .jump-row {
@@ -162,7 +153,6 @@ color: var(–text-dim); transition: all .2s;
 }
 .jump-btn:hover { border-color: var(–green); color: var(–green-lit); }
 
-
 /* ── PROGRESS ── */
 .card-area { display: flex; flex-direction: column; align-items: center; gap: 16px; }
 .card-progress {
@@ -172,7 +162,6 @@ font-size: .75rem; color: var(–text-dim); font-family: var(–font-mono);
 }
 .progress-bar { flex: 1; height: 3px; background: var(–bg3); border-radius: 999px; overflow: hidden; }
 .progress-fill { height: 100%; background: linear-gradient(90deg, var(–green-dim), var(–green-lit)); border-radius: 999px; transition: width .4s ease; }
-
 
 /* ── CARD ── */
 .card-scene { width: 100%; max-width: 560px; height: 320px; perspective: 1200px; cursor: pointer; }
@@ -192,7 +181,6 @@ content: ‘’; position: absolute; inset: -1px; border-radius: var(–radius-l
 background: linear-gradient(135deg, var(–border), transparent 60%); opacity: .5; z-index: -1;
 }
 
-
 /* ── STAR BUTTON (on card) ── */
 .card-star {
 position: absolute; top: 14px; left: 16px;
@@ -204,7 +192,6 @@ z-index: 10;
 .card-star:hover { transform: scale(1.2); }
 .card-star.starred { filter: drop-shadow(0 0 4px rgba(200,150,58,.5)); }
 
-
 .card-watermark { position: absolute; top: 14px; right: 18px; font-size: .6rem; color: var(–text-mute); font-family: var(–font-mono); letter-spacing: .05em; opacity: .6; }
 .card-word { font-family: var(–font-disp); font-size: 2.8rem; color: var(–green-glow); text-align: center; line-height: 1.2; margin-bottom: 8px; }
 .card-reading { font-size: .92rem; color: var(–text-dim); font-family: var(–font-mono); margin-bottom: 4px; }
@@ -215,7 +202,6 @@ font-family: var(–font-mono); margin-top: 8px;
 }
 .card-hint { position: absolute; bottom: 16px; font-size: .68rem; color: var(–text-mute); }
 
-
 .card-back-row { width: 100%; margin-bottom: 10px; }
 .card-back-label { font-size: .62rem; color: var(–text-mute); font-family: var(–font-mono); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 3px; }
 .card-back-val { font-size: .9rem; color: var(–text); line-height: 1.6; }
@@ -225,12 +211,20 @@ font-family: var(–font-mono); margin-top: 8px;
 .card-back-val.romanji       { font-size: .75rem; color: var(–text-mute); font-family: var(–font-mono); }
 .card-divider { width: 100%; height: 1px; background: var(–border); margin: 8px 0; }
 
+/* ── CONJUGATION ── */
+.conj-grid { display: flex; flex-direction: column; gap: 4px; margin-top: 4px; }
+.conj-item { display: flex; align-items: baseline; gap: 8px; }
+.conj-label {
+font-size: .62rem; color: var(–text-mute);
+font-family: var(–font-mono); min-width: 52px;
+text-align: right; flex-shrink: 0;
+}
+.conj-val { font-size: .85rem; color: var(–text-dim); }
 
 /* ── STARRED EMPTY STATE ── */
 .empty-state { text-align: center; padding: 48px 20px; color: var(–text-mute); }
 .empty-state .e-icon { font-size: 2.5rem; margin-bottom: 12px; }
 .empty-state .e-text { font-size: .88rem; line-height: 1.7; font-weight: 300; }
-
 
 /* ── COMPARE ── */
 .cmp-scene { width: 100%; max-width: 600px; perspective: 1200px; cursor: pointer; }
@@ -255,11 +249,9 @@ font-family: var(–font-mono); margin-top: 8px;
 .cmp-example-sent { font-size: .82rem; color: var(–text-dim); line-height: 1.5; }
 .cmp-example-zh   { font-size: .76rem; color: var(–text-mute); margin-top: 2px; }
 
-
 /* ── TAGS ── */
 .tag-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
 .tag { background: var(–bg2); border: 1px solid var(–border); border-radius: 6px; padding: 2px 8px; font-size: .7rem; color: var(–text-dim); font-family: var(–font-mono); }
-
 
 /* ── CONTROLS ── */
 .card-controls { display: flex; gap: 12px; align-items: center; }
@@ -271,10 +263,8 @@ font-family: var(–font-mono); margin-top: 8px;
 .key-hint { font-size: .7rem; color: var(–text-mute); font-family: var(–font-mono); text-align: center; }
 .key-tag  { display: inline-block; border: 1px solid var(–border); border-radius: 4px; padding: 1px 6px; font-size: .65rem; }
 
-
 /* ── FOOTER ── */
 footer { text-align: center; padding: 18px 28px; border-top: 1px solid var(–border); background: var(–bg2); font-size: .7rem; color: var(–text-mute); font-family: var(–font-mono); letter-spacing: .04em; }
-
 
 /* ── RWD ── */
 @media (max-width: 600px) {
@@ -286,10 +276,8 @@ main { padding: 24px 16px; }
 }
 </style>
 
-
 </head>
 <body>
-
 
 <nav class="nav">
   <div class="nav-logo">🌿 LinguaFlip</div>
@@ -297,12 +285,9 @@ main { padding: 24px 16px; }
   <button class="nav-back" id="backBtn" style="display:none" onclick="goBack()">← 返回</button>
 </nav>
 
-
 <main>
 
-
   <!-- S1 選語言 -->
-
 
   <section class="screen active" id="screenLang">
     <h1 class="section-title">選擇語言</h1>
@@ -310,9 +295,7 @@ main { padding: 24px 16px; }
     <div class="lang-grid" id="langGrid"></div>
   </section>
 
-
   <!-- S2 選類型 -->
-
 
   <section class="screen" id="screenCat">
     <h1 class="section-title" id="catTitle">—</h1>
@@ -320,19 +303,15 @@ main { padding: 24px 16px; }
     <div class="cat-grid" id="catGrid"></div>
   </section>
 
-
   <!-- S3 卡片 -->
-
 
   <section class="screen" id="screenLevel">
     <h1 class="section-title" id="levelTitle">—</h1>
     <p class="section-sub" id="levelSub">選擇等級開始練習</p>
     <div class="level-row" id="levelRow"></div>
 
-
 ```
 <div id="cardArea" class="card-area" style="display:none">
-
 
   <!-- 工具列 -->
   <div class="toolbar">
@@ -342,7 +321,6 @@ main { padding: 24px 16px; }
     <span class="total-badge" id="totalBadge"></span>
   </div>
 
-
   <!-- 跳卡 -->
   <div class="jump-row">
     <span>跳到第</span>
@@ -351,14 +329,12 @@ main { padding: 24px 16px; }
     <span id="jumpHint" style="font-size:.72rem;color:var(--text-mute);font-family:var(--font-mono)"></span>
   </div>
 
-
   <!-- 進度 -->
   <div class="card-progress">
     <span id="cardCounter">0 / 0</span>
     <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
     <span id="cardPct">0%</span>
   </div>
-
 
   <!-- 卡片 -->
   <div class="card-scene" id="cardScene" onclick="flipCard()">
@@ -394,17 +370,20 @@ main { padding: 24px 16px; }
           <div class="card-back-val romanji"       id="backExRomanji"></div>
           <div class="card-back-val example-zh"   id="backExZh"></div>
         </div>
+        <div class="card-back-row" id="backConjRow" style="display:none">
+          <div class="card-divider"></div>
+          <div class="card-back-label">動詞變化</div>
+          <div class="conj-grid" id="backConj"></div>
+        </div>
       </div>
     </div>
   </div>
-
 
   <!-- 空清單提示 -->
   <div class="empty-state" id="emptyStarred" style="display:none">
     <div class="e-icon">⭐</div>
     <div class="e-text">不熟清單是空的～<br>練習時按卡片上的 ☆ 就可以加入！</div>
   </div>
-
 
   <!-- 按鈕 -->
   <div class="card-controls">
@@ -420,12 +399,9 @@ main { padding: 24px 16px; }
 </div>
 ```
 
-
   </section>
 
-
   <!-- S4 易混淆比較 -->
-
 
   <section class="screen" id="screenCompare">
     <h1 class="section-title" id="cmpTitle">🔀 易混淆比較</h1>
@@ -468,14 +444,11 @@ main { padding: 24px 16px; }
     </div>
   </section>
 
-
 </main>
-
 
 <footer>
   © 2025 <span style="color:var(--text-dim);font-weight:500;">Vivian Wen</span> · LinguaFlip · All rights reserved
 </footer>
-
 
 <script>
 // ══ 語言設定 ══
@@ -501,7 +474,6 @@ const CATEGORIES = [
   { id:'compare',    icon:'🔀', name:'易混淆比較',  file:'compare',    desc:'長得像但意思不同的詞 ✨', special:true  },
 ];
 
-
 // ══ State ══
 let state = {
   lang:null, cat:null, level:null,
@@ -511,7 +483,6 @@ let state = {
   cmpCards:[], cmpIdx:0, cmpFlipped:false,
 };
 let navHistory = [];
-
 
 // ══ LocalStorage helpers ══
 function starKey(langId, catId, level) { return `lf_star_${langId}_${catId}_${level}`; }
@@ -534,7 +505,6 @@ function toggleStarId(id) {
   saveStarred(lang.id, cat.id, level, ids);
 }
 
-
 // ══ Init ══
 function init() {
   const grid = document.getElementById('langGrid');
@@ -551,7 +521,6 @@ function init() {
     grid.appendChild(el);
   });
 }
-
 
 // ══ Navigation ══
 function showScreen(id) {
@@ -575,7 +544,6 @@ function updateCrumb(parts) {
   document.getElementById('crumb').innerHTML = html;
 }
 
-
 // ══ Select Lang ══
 function selectLang(lang) {
   state.lang = lang;
@@ -593,7 +561,6 @@ function selectLang(lang) {
   updateCrumb([lang.name]);
   showScreen('screenCat');
 }
-
 
 // ══ Select Cat ══
 function selectCat(cat) {
@@ -616,7 +583,6 @@ function selectCat(cat) {
   showScreen('screenLevel');
 }
 
-
 // ══ Select Level ══
 async function selectLevel(level, pillEl) {
   document.querySelectorAll('.level-pill').forEach(p => p.classList.remove('active'));
@@ -624,7 +590,6 @@ async function selectLevel(level, pillEl) {
   state.level = level;
   state.starFilter = false;
   state.order = 'seq';
-
 
   const path = `data/${state.lang.id}/${state.cat.file}_${level.toLowerCase()}.json`;
   try {
@@ -635,14 +600,12 @@ async function selectLevel(level, pillEl) {
     state.allCards = getSampleCards(state.lang.id, level);
   }
 
-
   state.idx = 0; state.flipped = false;
   buildDisplayCards();
   updateToolbar();
   document.getElementById('cardArea').style.display = 'flex';
   renderCard();
 }
-
 
 // ══ Build display list ══
 function buildDisplayCards() {
@@ -661,13 +624,11 @@ function buildDisplayCards() {
   state.idx = 0;
 }
 
-
 // ══ Toolbar ══
 function updateToolbar() {
   document.getElementById('btnOrder').classList.toggle('active', state.order==='seq');
   document.getElementById('btnRandom').classList.toggle('active', state.order==='rnd');
   document.getElementById('btnStarFilter').classList.toggle('star-active', state.starFilter);
-
 
   const starredCount = getStarred(state.lang.id, state.cat.id, state.level).length;
   const filterLabel = state.starFilter
@@ -675,13 +636,11 @@ function updateToolbar() {
     : `☆ 不熟清單 (${starredCount})`;
   document.getElementById('btnStarFilter').textContent = filterLabel;
 
-
   const total = state.displayCards.length;
   document.getElementById('totalBadge').textContent = `共 ${state.allCards.length} 張`;
   document.getElementById('jumpInput').max = total;
   document.getElementById('jumpHint').textContent = total > 0 ? `（1–${total}）` : '';
 }
-
 
 function setOrder(mode) {
   state.order = mode;
@@ -690,14 +649,12 @@ function setOrder(mode) {
   renderCard();
 }
 
-
 function toggleStarFilter() {
   state.starFilter = !state.starFilter;
   buildDisplayCards();
   updateToolbar();
   renderCard();
 }
-
 
 // ══ Jump ══
 function jumpToCard() {
@@ -709,7 +666,6 @@ function jumpToCard() {
   renderCard();
 }
 
-
 // ══ Star toggle ══
 function toggleStar() {
   const card = state.displayCards[state.idx];
@@ -718,7 +674,6 @@ function toggleStar() {
   updateStarUI(card.id);
   updateToolbar();
 }
-
 
 function updateStarUI(cardId) {
   const starred = isStarred(cardId);
@@ -731,14 +686,12 @@ function updateStarUI(cardId) {
   s2.classList.toggle('starred', starred);
 }
 
-
 // ══ Render Card ══
 function renderCard() {
   const scene   = document.getElementById('cardScene');
   const empty   = document.getElementById('emptyStarred');
   const controls= document.querySelector('.card-controls');
   const keyhint = document.querySelector('.key-hint');
-
 
   if (!state.displayCards.length) {
     scene.style.display   = 'none';
@@ -751,39 +704,53 @@ function renderCard() {
     return;
   }
 
-
   scene.style.display    = '';
   controls.style.display = '';
   keyhint.style.display  = '';
   empty.style.display    = 'none';
 
-
   const c = state.displayCards[state.idx];
   state.flipped = false;
   scene.classList.remove('flipped');
 
-
   document.getElementById('frontWord').textContent    = c.word || '—';
-  document.getElementById('frontReading').textContent = c.reading || c.romanization || c.transliteration || '';
+  document.getElementById('frontReading').textContent = c.reading || c.romanization || c.romaji || c.transliteration || '';
   document.getElementById('frontPos').textContent     = c.pos || '';
-  document.getElementById('backMeaning').textContent  = c.meaning || '—';
+  // meaning: 支援 meaning / chinese 兩種欄位名稱
+  document.getElementById('backMeaning').textContent  = c.meaning || c.chinese || '—';
 
-
-  const syns = c.synonyms||[], ants = c.antonyms||[];
+  // synonyms: 支援 synonyms / similar
+  const syns = c.synonyms || c.similar || [];
+  // antonyms: 支援 antonyms / opposite
+  const ants = c.antonyms || c.opposite || [];
   document.getElementById('backSyn').innerHTML = syns.map(s=>`<span class="tag">${s}</span>`).join('');
   document.getElementById('backAnt').innerHTML = ants.map(s=>`<span class="tag">${s}</span>`).join('');
   document.getElementById('backSynRow').style.display = syns.length ? '' : 'none';
   document.getElementById('backAntRow').style.display = ants.length ? '' : 'none';
 
+  // example: 支援 jp/cn 以及 japanese/chinese 兩種欄位名稱
+  const ex = c.example || {};
+  document.getElementById('backExOrig').textContent    = ex.jp || ex.japanese || ex.original || ex.original_BR || '';
+  document.getElementById('backExRomanji').textContent = ex.romaji || ex.romanji || ex.romanization || '';
+  document.getElementById('backExZh').textContent      = ex.cn || ex.chinese || '';
 
-  const ex = c.example||{};
-  document.getElementById('backExOrig').textContent    = ex.japanese||ex.original||ex.original_BR||'';
-  document.getElementById('backExRomanji').textContent = ex.romanji ||ex.romanization||'';
-  document.getElementById('backExZh').textContent      = ex.chinese||'';
-
+  // conjugation（動詞變化）
+  const conjRow = document.getElementById('backConjRow');
+  const conj = c.conjugation;
+  if (conj && Object.keys(conj).length) {
+    const labels = { plain:'辭書形', masu:'ます形', te:'て形', tai:'たい形', potential:'可能形', nai:'ない形', passive:'被動形', causative:'使役形' };
+    document.getElementById('backConj').innerHTML = Object.entries(conj)
+      .map(([k,v]) => `
+        <div class="conj-item">
+          <span class="conj-label">${labels[k]||k}</span>
+          <span class="conj-val">${v}</span>
+        </div>`).join('');
+    conjRow.style.display = '';
+  } else {
+    conjRow.style.display = 'none';
+  }
 
   updateStarUI(c.id);
-
 
   const total=state.displayCards.length, cur=state.idx+1, pct=Math.round(cur/total*100);
   document.getElementById('cardCounter').textContent  = `${cur} / ${total}`;
@@ -791,12 +758,10 @@ function renderCard() {
   document.getElementById('cardPct').textContent      = pct+'%';
 }
 
-
 // ══ Flip / Nav ══
 function flipCard() { state.flipped=!state.flipped; document.getElementById('cardScene').classList.toggle('flipped',state.flipped); }
 function nextCard() { if(state.idx<state.displayCards.length-1){state.idx++;renderCard();} }
 function prevCard() { if(state.idx>0){state.idx--;renderCard();} }
-
 
 // ══ Compare ══
 async function loadCompare() {
@@ -844,7 +809,6 @@ function flipCmp()  { state.cmpFlipped=!state.cmpFlipped; document.getElementByI
 function nextCmp()  { if(state.cmpIdx<state.cmpCards.length-1){state.cmpIdx++;renderCmp();} }
 function prevCmp()  { if(state.cmpIdx>0){state.cmpIdx--;renderCmp();} }
 
-
 // ══ Keyboard ══
 document.addEventListener('keydown', e => {
   const lv  = document.getElementById('screenLevel').classList.contains('active');
@@ -862,7 +826,6 @@ document.addEventListener('keydown', e => {
     if (e.code==='ArrowLeft')   prevCmp();
   }
 });
-
 
 // ══ Sample Data ══
 function getSampleCards(langId) {
@@ -888,10 +851,8 @@ function getSampleCompare(langId) {
   return d[langId]||d['japanese'];
 }
 
-
 init();
 </script>
-
 
 </body>
 </html>
